@@ -2,14 +2,27 @@
   "name": "poke-admin",
   "version": "1.0.0",
   "description": "Demo CRUD app for Cypress presentation.",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
     "db:start": "docker-compose up -d --build",
     "db:stop": "docker-compose down",
     "db:make": "pg-bump create",
     "db:up": "pg-bump up",
     "db:down": "pg-bump down",
-    "db:cycle": "run-s -s db:down db:up"
+    "db:cycle": "run-s -s db:down db:up",
+    "start": "node -r dotenv/config -r esm .",
+    "lint": "eslint ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "pgBump": {
     "require": [
@@ -17,6 +30,60 @@
     ],
     "files": "database/migrations/",
     "connectionVar": "POSTGRES_URL"
+  },
+  "eslintConfig": {
+    "parser": "babel-eslint",
+    "extends": [
+      "eslint:recommended",
+      "standard"
+    ],
+    "rules": {
+      "padded-blocks": 0,
+      "curly": [
+        "error",
+        "multi-line"
+      ],
+      "brace-style": [
+        "error",
+        "stroustrup"
+      ],
+      "no-console": [
+        "error",
+        {
+          "allow": [
+            "warn",
+            "error"
+          ]
+        }
+      ],
+      "space-before-function-paren": [
+        "error",
+        {
+          "anonymous": "always",
+          "named": "never",
+          "asyncArrow": "always"
+        }
+      ]
+    },
+    "overrides": [
+      {
+        "files": [
+          "**/test/*.js",
+          "**/*.test.js"
+        ],
+        "env": {
+          "mocha": true
+        }
+      },
+      {
+        "files": [
+          "{api,server}/**/*.js"
+        ],
+        "env": {
+          "node": true
+        }
+      }
+    ]
   },
   "repository": {
     "type": "git",
@@ -31,9 +98,20 @@
   "homepage": "https://github.com/thebearingedge/poke-admin#readme",
   "dependencies": {
     "dotenv": "6.2.0",
+    "esm": "3.2.14",
+    "express": "4.16.4",
     "pg-bump": "3.0.0-beta.4"
   },
   "devDependencies": {
+    "babel-eslint": "10.0.1",
+    "eslint": "5.15.1",
+    "eslint-config-standard": "12.0.0",
+    "eslint-plugin-import": "2.16.0",
+    "eslint-plugin-node": "8.0.1",
+    "eslint-plugin-promise": "4.0.1",
+    "eslint-plugin-standard": "4.0.0",
+    "husky": "1.3.1",
+    "lint-staged": "8.1.5",
     "npm-run-all": "4.1.5"
   }
 }
