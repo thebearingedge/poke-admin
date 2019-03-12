@@ -1,0 +1,21 @@
+{
+  "name": "poke-admin",
+  "version": "1.0.0",
+  "description": "Demo CRUD app for Cypress presentation.",
+  "main": "index.js",
+  "scripts": {
+    "db:start": "docker-compose up -d --build",
+    "db:stop": "docker-compose down -v --rmi all"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thebearingedge/poke-admin.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thebearingedge/poke-admin/issues"
+  },
+  "homepage": "https://github.com/thebearingedge/poke-admin#readme"
+}
