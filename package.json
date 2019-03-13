@@ -13,7 +13,7 @@
     "start": "node -r dotenv/config -r esm .",
     "lint": "eslint .",
     "test:api": "mocha --opts api/test/mocha.opts",
-    "tdd:api": "run-s -s 'test:api -- -w -R min'",
+    "tdd:api": "run-s -s db:cycle 'test:api -- -w -R min'",
     "cover:api": "nyc npm run test:api",
     "test": "run-s -s test:*"
   },
@@ -95,7 +95,7 @@
       },
       {
         "files": [
-          "{api,server}/**/*.js"
+          "{api,database,server}/**/*.js"
         ],
         "env": {
           "node": true
@@ -116,20 +116,34 @@
   "homepage": "https://github.com/thebearingedge/poke-admin#readme",
   "dependencies": {
     "axios": "0.18.0",
+    "bcrypt": "3.0.4",
+    "bluebird": "3.5.3",
+    "boom": "7.3.0",
+    "connect-redis": "3.4.0",
     "dotenv": "6.2.0",
     "esm": "3.2.14",
     "express": "4.16.4",
-    "pg-bump": "3.0.0-beta.4"
+    "express-promise-router": "3.0.3",
+    "express-session": "1.15.6",
+    "jsonwebtoken": "8.5.0",
+    "knex": "0.16.3",
+    "lodash": "4.17.11",
+    "pg": "7.8.2",
+    "pg-bump": "3.0.0-beta.4",
+    "redis": "2.8.0",
+    "yup": "0.26.10"
   },
   "devDependencies": {
     "babel-eslint": "10.0.1",
     "chai": "4.2.0",
+    "chai-struct": "3.0.4",
     "eslint": "5.15.1",
     "eslint-config-standard": "12.0.0",
     "eslint-plugin-import": "2.16.0",
     "eslint-plugin-node": "8.0.1",
     "eslint-plugin-promise": "4.0.1",
     "eslint-plugin-standard": "4.0.0",
+    "faker": "4.1.0",
     "husky": "1.3.1",
     "lint-staged": "8.1.5",
     "mocha": "6.0.2",
