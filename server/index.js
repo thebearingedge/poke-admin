@@ -1,8 +1,12 @@
-import createApi from '../api/create-api'
+import createServer from './create-server'
+import { knex, redis } from '../database/connections'
 
-const app = createApi()
+const dev = process.env.NODE_ENV !== 'production'
 
-app.listen(process.env.PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log('Listening on port', process.env.PORT)
-})
+;(async () => {
+  const server = await createServer({ dev, knex, redis })
+  server.listen(process.env.PORT, () => {
+    // eslint-disable-next-line no-console
+    console.log('listening on port', process.env.PORT)
+  })
+})()
