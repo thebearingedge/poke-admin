@@ -1,5 +1,13 @@
-export default function App() {
+import { Consumer } from '../lib'
+
+export default function Index() {
   return (
-    <h1>Hello, World!</h1>
+    <Consumer>
+      { value => {
+        // eslint-disable-next-line no-console
+        console.log(Object.keys(value))
+        return <h1>Hello, World!</h1>
+      }}
+    </Consumer>
   )
 }
