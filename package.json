@@ -10,6 +10,7 @@
     "db:up": "pg-bump up",
     "db:down": "pg-bump down",
     "db:cycle": "run-s -s db:down db:up",
+    "build": "next build client/",
     "start": "node -r dotenv/config -r esm .",
     "dev": "run-s -s db:cycle && nodemon .",
     "lint": "eslint --fix .",
