@@ -2,8 +2,8 @@ import noop from 'lodash/noop'
 import Router from 'next/router'
 import NProgress from 'nprogress'
 import App, { Container } from 'next/app'
-import { isServer, Provider } from '../lib'
-import { initApi, initSession } from '../services'
+import { isServer } from '../lib'
+import { Provider, initApi, initSession } from '../services'
 
 export default class extends App {
   static async getInitialProps({ Component, router, ctx }) {
@@ -13,7 +13,7 @@ export default class extends App {
     const session = initSession(user)
     const { getInitialProps = noop } = Component
     return {
-      user: session.user,
+      user,
       pageProps: await getInitialProps({
         ...ctx, api, router, session, isServer
       })
@@ -44,6 +44,9 @@ export default class extends App {
         <style jsx global>{`
           html {
             font-size: 18px;
+          }
+          ::placeholder {
+            opacity: 0.75 !important;
           }
         `}</style>
       </>

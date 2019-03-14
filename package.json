@@ -157,8 +157,10 @@
     "pg": "7.8.2",
     "pg-bump": "3.0.0-beta.4",
     "react": "16.8.4",
+    "react-display-name": "0.2.4",
     "react-dom": "16.8.4",
     "react-final-form": "4.1.0",
+    "reactstrap": "7.1.0",
     "redis": "2.8.0",
     "yup": "0.26.10"
   },
