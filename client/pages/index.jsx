@@ -1,4 +1,5 @@
-import { Consumer } from '../lib'
+import { authorize } from '../lib'
+import { Consumer } from '../services'
 
 export default function Index() {
   return (
@@ -11,3 +12,5 @@ export default function Index() {
     </Consumer>
   )
 }
+
+Index.getInitialProps = authorize()

@@ -10,9 +10,10 @@
     "db:up": "pg-bump up",
     "db:down": "pg-bump down",
     "db:cycle": "run-s -s db:down db:up",
+    "db:seed": "node -r dotenv/config -r esm database/seeds/__dev__.js",
     "build": "next build client/",
     "start": "node -r dotenv/config -r esm .",
-    "dev": "run-s -s db:cycle && nodemon .",
+    "dev": "run-s -s db:cycle db:seed && nodemon .",
     "lint": "eslint --fix .",
     "test:api": "mocha --opts api/test/mocha.opts",
     "tdd:api": "run-s -s db:cycle 'test:api -- -w -R min'",
@@ -43,7 +44,7 @@
       "text-summary"
     ],
     "include": [
-      "**/*.js"
+      "api/**/*.js"
     ],
     "exclude": [
       "**/test/**",
@@ -142,6 +143,7 @@
     "bcrypt": "3.0.4",
     "bluebird": "3.5.3",
     "boom": "7.3.0",
+    "chalk": "2.4.2",
     "connect-redis": "3.4.0",
     "dotenv": "6.2.0",
     "esm": "3.2.14",
@@ -175,7 +177,6 @@
     "eslint-plugin-promise": "4.0.1",
     "eslint-plugin-react": "7.12.4",
     "eslint-plugin-standard": "4.0.0",
-    "faker": "4.1.0",
     "husky": "1.3.1",
     "lint-staged": "8.1.5",
     "mocha": "6.0.2",

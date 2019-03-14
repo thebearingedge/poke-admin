@@ -6,13 +6,13 @@ import camelKeys from './lib/camel-keys'
 
 promisifyAll(RedisClient.prototype)
 
-export const knex = Knex({
+export const createKnex = () => Knex({
   client: 'pg',
   connection: process.env.POSTGRES_URL,
   postProcessResponse: camelKeys,
   wrapIdentifier: (value, wrap) => wrap(snakeCase(value))
 })
 
-export const redis = new RedisClient({
+export const createRedis = () => new RedisClient({
   url: process.env.REDIS_URL
 })

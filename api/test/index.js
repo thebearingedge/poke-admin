@@ -1,29 +1,28 @@
 import axios from 'axios'
-import bcrypt from 'bcrypt'
 import chai from 'chai'
-import faker from 'faker'
 import noop from 'lodash/noop'
 import { chaiStruct } from 'chai-struct'
 import createApi from '../create-api'
-import { knex, redis } from '../../database/connections'
+import * as admin from '../../database/seeds/admin'
+import { createKnex, createRedis } from '../../database/connections'
 
 chai.use(chaiStruct)
 
 let server
+let knex
+let redis
 let _knex
 let _redis
 let _trx
 
 before('start root transaction and insert test user into database', done => {
+  knex = createKnex()
+  redis = createRedis()
   knex.transaction(trx => {
     _trx = trx
     ;(async () => {
       try {
-        const { password: unhashed } = TEST_USER
-        const password = await bcrypt.hash(unhashed, 1)
-        await _trx
-          .insert({ ...TEST_USER, password })
-          .into('users')
+        await admin.seed(trx)
         done()
       }
       catch (err) {
@@ -74,10 +73,5 @@ export const client = axios.create({
   baseURL: process.env.API_URL
 })
 
-export const TEST_USER = {
-  userId: faker.random.uuid(),
-  username: 'admin',
-  password: 'password'
-}
-
-export { expect } from 'chai'
+export const { expect } = chai
+export const { user: TEST_USER } = admin
