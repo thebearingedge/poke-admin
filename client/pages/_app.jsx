@@ -3,7 +3,7 @@ import Router from 'next/router'
 import NProgress from 'nprogress'
 import App, { Container } from 'next/app'
 import { isServer } from '../lib'
-import { Provider, initApi, initSession } from '../services'
+import { Provider, initApi, initModal, initSession } from '../services'
 
 export default class extends App {
   static async getInitialProps({ Component, router, ctx }) {
@@ -22,6 +22,7 @@ export default class extends App {
   constructor(props, ...args) {
     super(props, ...args)
     this.api = initApi()
+    this.modal = initModal()
     this.session = initSession(props.user)
   }
   componentDidMount() {
@@ -32,12 +33,12 @@ export default class extends App {
   }
   render() {
     const { router } = Router
-    const { api, session } = this
+    const { api, modal, session } = this
     const { Component, pageProps = {} } = this.props
     return (
       <>
         <Container>
-          <Provider value={{ api, router, session }}>
+          <Provider value={{ api, modal, router, session }}>
             <Component {...pageProps}/>
           </Provider>
         </Container>

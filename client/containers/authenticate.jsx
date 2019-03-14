@@ -1,11 +1,12 @@
 import { FORM_ERROR } from 'final-form'
 import { Component } from 'react'
 import { LoginForm } from '../components/login'
+import { Alert } from '../components/modal'
 import { withServices } from '../services/context'
 
 class Authenticate extends Component {
   handleLogin = async credentials => {
-    const { api, router, session } = this.props.services
+    const { api, modal, router, session } = this.props
     const { status, data } = await api.post('/auth/login', credentials, {
       validateStatus: status => [201, 400, 401].includes(status)
     })
@@ -14,19 +15,31 @@ class Authenticate extends Component {
         session.start(data)
         router.push('/')
         return
-      default:
+      case 400:
+        throw new Error('NOT IMPLEMENTED')
+      case 401:
+        modal.open({
+          render({ close }) {
+            return (
+              <Alert
+                close={close}
+                message="Incorrect username or password." />
+            )
+          }
+        })
         return { [FORM_ERROR]: 'Invalid login.' }
     }
   }
   render() {
     return (
-      <LoginForm onSubmit={this.handleLogin}/>
+      <LoginForm onSubmit={this.handleLogin} />
     )
   }
 }
 
-export default withServices(Authenticate, ({ api, router, session }) => ({
+export default withServices(Authenticate, ({ api, router, modal, session }) => ({
   api,
+  modal,
   router,
   session
 }))
