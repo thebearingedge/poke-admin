@@ -1,4 +1,5 @@
 import Boom from 'boom'
+import { setIn } from 'final-form'
 import * as yup from 'yup'
 import pick from 'lodash/pick'
 
@@ -14,7 +15,9 @@ export default function validate(schemas) {
     }
     catch (invalid) {
       const err = Boom.badRequest('Validation error.')
-      err.output.payload.errors = invalid
+      err.output.payload.errors = invalid.inner.reduce((errors, error) => (
+        setIn(errors, error.path, error.message)
+      ), {})
       throw err
     }
   }

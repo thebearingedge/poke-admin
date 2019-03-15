@@ -16,18 +16,18 @@ class Authenticate extends Component {
         router.push('/')
         return
       case 400:
-        throw new Error('NOT IMPLEMENTED')
+        return data.errors
       case 401:
         modal.open({
           render({ close }) {
             return (
               <Alert
                 close={close}
-                message="Incorrect username or password." />
+                message={data.error} />
             )
           }
         })
-        return { [FORM_ERROR]: 'Invalid login.' }
+        return { [FORM_ERROR]: data.error }
     }
   }
   render() {

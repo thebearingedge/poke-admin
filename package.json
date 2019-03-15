@@ -127,6 +127,19 @@
       }
     ]
   },
+  "babel": {
+    "overrides": [
+      {
+        "test": "client/",
+        "plugins": [
+          "babel-plugin-root-import"
+        ],
+        "presets": [
+          "next/babel"
+        ]
+      }
+    ]
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/thebearingedge/poke-admin.git"
@@ -167,7 +180,9 @@
     "yup": "0.26.10"
   },
   "devDependencies": {
+    "@babel/core": "7.3.4",
     "babel-eslint": "10.0.1",
+    "babel-plugin-root-import": "6.1.0",
     "chai": "4.2.0",
     "chai-struct": "3.0.4",
     "eslint": "5.15.1",
