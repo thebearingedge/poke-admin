@@ -23,11 +23,11 @@ class Authenticate extends Component {
             return (
               <Alert
                 close={close}
-                message={data.error} />
+                message={data.message} />
             )
           }
         })
-        return { [FORM_ERROR]: data.error }
+        return { [FORM_ERROR]: data.message }
     }
   }
   render() {

@@ -70,7 +70,7 @@ after('rollback root transaction close database connections', async () => {
 
 export const client = axios.create({
   validateStatus: () => true,
-  baseURL: process.env.API_URL
+  baseURL: process.env.SERVER_URL
 })
 
 export const { expect } = chai

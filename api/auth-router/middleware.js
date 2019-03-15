@@ -7,7 +7,7 @@ const login = ({ users }) =>
   async (req, res) => {
     const { xhr, body: { username, password } } = req
     const { userId } = await users.authenticate({ username, password })
-    if (!userId) throw boom.unauthorized('Invalid username or password.')
+    if (!userId) throw boom.unauthorized('Incorrect username or password.')
     const token = jwt.sign({ userId }, process.env.JWT_SECRET)
     if (!xhr) return res.status(201).json({ token })
     await new Promise((resolve, reject) => {
