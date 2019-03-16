@@ -1,8 +1,9 @@
 {
+  "defaultCommandTimeout": 6000,
+  "fixturesFolder": false,
+  "integrationFolder": "test/features/",
+  "pluginsFile": false,
   "screenshotsFolder": "test/screenshots/",
   "supportFile": "test/support/index.js",
-  "integrationFolder": "test/features/",
-  "fixturesFolder": false,
-  "pluginsFile": false,
   "video": false
 }
