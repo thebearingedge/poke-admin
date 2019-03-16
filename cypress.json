@@ -1,5 +1,5 @@
 {
-  "defaultCommandTimeout": 6000,
+  "defaultCommandTimeout": 10000,
   "fixturesFolder": false,
   "integrationFolder": "test/features/",
   "pluginsFile": false,
