@@ -16,7 +16,7 @@ class Authenticate extends Component {
         router.push('/')
         return
       case 400:
-        return data.errors
+        return data.errors.body
       case 401:
         modal.open({
           render({ close }) {
