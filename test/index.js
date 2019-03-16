@@ -5,7 +5,7 @@ import path from 'path'
 import createServer from '../server/create-server'
 import getConnections from '../database/get-connections'
 
-const dev = process.env.NODE_ENV !== 'CI'
+const dev = !process.env.CI
 const [ , , method = 'open' ] = process.argv
 const envFile = path.join(process.cwd(), '.env')
 
