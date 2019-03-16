@@ -1,11 +1,9 @@
 import createServer from './create-server'
-import { createKnex, createRedis } from '../database/connections'
-
-const dev = process.env.NODE_ENV !== 'production'
-const knex = createKnex()
-const redis = createRedis()
+import getConnections from '../database/get-connections'
 
 ;(async () => {
+  const { knex, redis } = await getConnections()
+  const dev = process.env.NODE_ENV !== 'production'
   const server = await createServer({ dev, knex, redis })
   server.listen(process.env.PORT, () => {
     // eslint-disable-next-line no-console

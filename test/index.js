@@ -3,18 +3,15 @@ import dotenv from 'dotenv'
 import fs from 'fs'
 import path from 'path'
 import createServer from '../server/create-server'
-import { createKnex, createRedis } from '../database/connections'
+import getConnections from '../database/get-connections'
 
 const dev = process.env.NODE_ENV !== 'CI'
 const [ , , method = 'open' ] = process.argv
 const envFile = path.join(process.cwd(), '.env')
 
 ;(async () => {
-
-  const knex = createKnex()
-  const redis = createRedis()
+  const { knex, redis } = await getConnections()
   const server = await createServer({ dev, knex, redis })
-
   server.listen(process.env.PORT, async () => {
     try {
       const results = await cypress[method]({

@@ -1,9 +1,8 @@
 import path from 'path'
-import { createKnex, createRedis } from '../connections'
+import getConnections from '../get-connections'
 
 (async () => {
-  const knex = createKnex()
-  const redis = createRedis()
+  const { knex, redis } = await getConnections()
   try {
     await redis.flushallAsync()
     await knex.seed.run({

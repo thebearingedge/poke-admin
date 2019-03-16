@@ -6,6 +6,7 @@
   "scripts": {
     "db:start": "docker-compose up -d --build",
     "db:stop": "docker-compose down",
+    "db:check": "node -r dotenv/config -r esm database/check.js",
     "db:make": "pg-bump create",
     "db:up": "pg-bump up",
     "db:down": "pg-bump down",
@@ -13,13 +14,13 @@
     "db:seed": "node -r dotenv/config -r esm database/seeds/__dev__.js",
     "build": "next build client/",
     "start": "node -r dotenv/config -r esm .",
-    "dev": "run-s -s db:cycle db:seed && nodemon .",
+    "dev": "run-s -s db:check db:cycle && nodemon .",
     "lint": "eslint --fix .",
-    "test:api": "mocha --opts api/test/mocha.opts",
-    "tdd:api": "run-s -s db:cycle 'test:api -- -w -R min'",
+    "test:api": "run-s -s db:check db:cycle && mocha --opts api/test/mocha.opts",
+    "tdd:api": "run-s -s 'test:api -- -w -R min'",
     "cover:api": "nyc npm run test:api",
     "test": "run-s -s test:*",
-    "e2e": "run-s -s db:cycle && node -r dotenv/config -r esm test/",
+    "e2e": "run-s -s db:check db:cycle && node -r dotenv/config -r esm test/",
     "test:e2e": "run-s -s build 'e2e run'"
   },
   "husky": {
@@ -184,6 +185,7 @@
     "nprogress": "0.2.0",
     "pg": "7.8.2",
     "pg-bump": "3.0.0-beta.4",
+    "promise-retry": "1.1.1",
     "react": "16.8.4",
     "react-display-name": "0.2.4",
     "react-dom": "16.8.4",

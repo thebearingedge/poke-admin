@@ -4,40 +4,43 @@ import noop from 'lodash/noop'
 import { chaiStruct } from 'chai-struct'
 import createApi from '../create-api'
 import * as admin from '../../database/seeds/admin'
-import { createKnex, createRedis } from '../../database/connections'
+import getConnections from '../../database/get-connections'
 
 chai.use(chaiStruct)
 
 let server
 let knex
-let redis
-let _knex
-let _redis
-let _trx
+let rootRedis
+let rootTransaction
+let testRedis
+let testTransaction
 
 before('start root transaction and insert test user into database', done => {
-  knex = createKnex()
-  redis = createRedis()
-  knex.transaction(trx => {
-    _trx = trx
-    ;(async () => {
-      try {
-        await admin.seed(trx)
-        done()
-      }
-      catch (err) {
-        return done(err)
-      }
-    })()
-  }).catch(noop)
+  (async () => {
+    const connections = await getConnections()
+    knex = connections.knex
+    rootRedis = connections.redis
+    knex.transaction(trx => {
+      rootTransaction = trx
+      ;(async () => {
+        try {
+          await admin.seed(rootTransaction)
+          done()
+        }
+        catch (err) {
+          return done(err)
+        }
+      })()
+    }).catch(noop)
+  })()
 })
 
-beforeEach('start nested transaction and start server', done => {
-  _trx.transaction(trx => {
-    _knex = trx
+beforeEach('begin test transaction and start server', done => {
+  rootTransaction.transaction(trx => {
+    testTransaction = trx
     try {
-      _redis = redis.duplicate()
-      const api = createApi({ knex: _knex, redis: _redis })
+      testRedis = rootRedis.duplicate()
+      const api = createApi({ knex: testTransaction, redis: testRedis })
       server = api.listen(process.env.PORT, done)
     }
     catch (err) {
@@ -46,11 +49,11 @@ beforeEach('start nested transaction and start server', done => {
   }).catch(noop)
 })
 
-afterEach('rollback nested transaction and stop server', done => {
+afterEach('rollback test transaction and stop server', done => {
   (async () => {
     try {
-      await _knex.rollback()
-      await _redis.quitAsync()
+      await testTransaction.rollback()
+      await testRedis.quitAsync()
       done()
     }
     catch (err) {
@@ -63,9 +66,11 @@ afterEach('rollback nested transaction and stop server', done => {
 })
 
 after('rollback root transaction close database connections', async () => {
-  await _trx.rollback()
-  await knex.destroy()
-  await redis.quitAsync()
+  await Promise.all([
+    rootTransaction.rollback(),
+    knex.destroy(),
+    rootRedis.quitAsync()
+  ])
 })
 
 export const client = axios.create({
