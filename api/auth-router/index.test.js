@@ -14,7 +14,7 @@ describe('POST /auth/login', () => {
       expect(status).to.equal(401)
       expect(data).to.include({
         error: 'Unauthorized',
-        message: 'Invalid login.'
+        message: 'Incorrect username or password.'
       })
     })
 
@@ -32,7 +32,7 @@ describe('POST /auth/login', () => {
       expect(status).to.equal(401)
       expect(data).to.include({
         error: 'Unauthorized',
-        message: 'Invalid login.'
+        message: 'Incorrect username or password.'
       })
     })
 
