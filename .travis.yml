@@ -10,4 +10,5 @@ before_install:
   - cp .env.example .env
   - docker-compose up -d
 script:
-  - npm run test:api
+  - npm run cover:api
+  - xvfb-run -s "-screen 0 1024x768x24" npm run test:e2e
