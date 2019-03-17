@@ -20,7 +20,7 @@ class Modal extends Model {
       render
     })
   }
-  close(response) {
+  done(response) {
     if (!this._model.isOpen) return
     this._model.onClose(response)
     this.update(this.init)

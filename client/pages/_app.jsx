@@ -3,6 +3,7 @@ import Router from 'next/router'
 import NProgress from 'nprogress'
 import App, { Container } from 'next/app'
 import { isServer } from '../lib'
+import { Modal } from '../containers'
 import { Provider, initApi, initModal, initSession } from '../services'
 
 export default class extends App {
@@ -40,6 +41,7 @@ export default class extends App {
         <Container>
           <Provider value={{ api, modal, router, session }}>
             <Component {...pageProps}/>
+            <Modal />
           </Provider>
         </Container>
         <style jsx global>{`

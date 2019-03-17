@@ -6,11 +6,11 @@ export default class Model {
   get init() {
     return {}
   }
-  subscribe(listener) {
-    const listenerIndex = this._listeners.push(listener) - 1
-    listener(this._model)
+  subscribe(fn) {
+    const index = this._listeners.push(fn) - 1
+    fn(this._model)
     return () => {
-      this._listeners.splice(listenerIndex, 1)
+      this._listeners.splice(index, 1)
     }
   }
   update(updater) {
@@ -22,8 +22,8 @@ export default class Model {
         this._model = { ...this._model, ...updater }
         break
       default:
-        throw new Error('updater passed to StateModel.setState must be a Function or an Object.')
+        throw new Error('updater passed to Model.update must be a Function or an Object.')
     }
-    this._listeners.forEach(listener => listener(this._model))
+    this._listeners.forEach(fn => fn(this._model))
   }
 }

@@ -4,7 +4,8 @@ import logInSchema from '~/schemas/log-in'
 
 export default function LoginForm(props) {
   return (
-    <Form {...props}
+    <Form
+      {...props}
       className="login-form d-block"
       schema={logInSchema}
       render={({ submitting, submitSucceeded }) => {

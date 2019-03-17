@@ -1,20 +1,18 @@
 import identity from 'lodash/identity'
-import { createContext, PureComponent } from 'react'
+import { createContext, memo, useContext } from 'react'
 import getDisplayName from 'react-display-name'
 
-export const { Provider, Consumer } = createContext({})
+const servicesContext = createContext({})
+
+export const { Provider } = servicesContext
 
 export const withServices = (Component, selectServices = identity) => {
-  return class WithServices extends PureComponent {
-    static displayName = `WithServices(${getDisplayName(Component)})`
-    render() {
-      return (
-        <Consumer>
-          { services =>
-            <Component {...selectServices(services)} {...this.props} />
-          }
-        </Consumer>
-      )
-    }
-  }
+  const WithServices = memo(props => {
+    const services = useContext(servicesContext)
+    return (
+      <Component {...selectServices(services)} {...props} />
+    )
+  })
+  WithServices.displayName = `WithServices(${getDisplayName(Component)})`
+  return WithServices
 }
