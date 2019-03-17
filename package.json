@@ -16,7 +16,7 @@
     "db:cycle": "run-s -s db:down db:up db:seed",
     "db:seed": "node -r dotenv/config -r esm database/seeds/__dev__.js",
     "build:client": "next build client/",
-    "build": "run-s -s build:client && docker build -t poke-admin .",
+    "build": "docker build -t poke-admin .",
     "start": "node -r dotenv/config -r esm .",
     "dev": "run-s -s db:check db:cycle && nodemon .",
     "lint": "eslint --fix .",
@@ -25,7 +25,7 @@
     "cover:api": "nyc npm run test:api",
     "test": "run-s -s test:*",
     "e2e": "run-s -s db:check db:cycle && node -r dotenv/config -r esm test/",
-    "test:e2e": "run-s -s build 'e2e run'"
+    "test:e2e": "run-s -s build:client 'e2e run'"
   },
   "dependencies": {
     "argon2": "0.21.0",
