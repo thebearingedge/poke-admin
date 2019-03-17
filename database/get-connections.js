@@ -1,7 +1,7 @@
 import { promisifyAll } from 'bluebird'
 import Knex from 'knex'
 import retry from 'promise-retry'
-import { RedisClient } from 'redis'
+import { RedisClient, createClient } from 'redis'
 import snakeCase from 'lodash/snakeCase'
 import camelKeys from './lib/camel-keys'
 
@@ -31,12 +31,11 @@ const connectToPostgres = () => {
 }
 
 const connectToRedis = () => {
-  const REDIS_CONNECTION = process.env.REDISCLOUD_URL || process.env.REDIS_URL
   return retry(async retry => {
     try {
       await new Promise((resolve, reject) => {
-        redis = new RedisClient({
-          url: REDIS_CONNECTION,
+        redis = createClient({
+          url: process.env.REDIS_URL,
           retry_strategy: /* istanbul ignore next */ ({ error }) => {
             reject(error)
             return null
@@ -44,8 +43,8 @@ const connectToRedis = () => {
         })
         redis.on('ready', () => redis.quit(resolve))
       })
-      return new RedisClient({
-        url: process.env.REDIS_CONNECTION
+      return createClient({
+        url: process.env.REDIS_URL
       })
     }
     catch (err) /* istanbul ignore next */ {
