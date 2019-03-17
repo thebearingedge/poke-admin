@@ -1,0 +1,21 @@
+{
+  "addons": [
+    "heroku-postgresql",
+    "rediscloud",
+    "heroku-redis"
+  ],
+  "buildpacks": [],
+  "env": {
+    "REDISCLOUD_URL": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "name": "poke-admin",
+  "scripts": {},
+  "stack": "container"
+}

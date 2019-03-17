@@ -31,11 +31,12 @@ const connectToPostgres = () => {
 }
 
 const connectToRedis = () => {
+  const REDIS_CONNECTION = process.env.REDISCLOUD_URL || process.env.REDIS_URL
   return retry(async retry => {
     try {
       await new Promise((resolve, reject) => {
         redis = new RedisClient({
-          url: process.env.REDIS_URL,
+          url: REDIS_CONNECTION,
           retry_strategy: /* istanbul ignore next */ ({ error }) => {
             reject(error)
             return null
@@ -44,7 +45,7 @@ const connectToRedis = () => {
         redis.on('ready', () => redis.quit(resolve))
       })
       return new RedisClient({
-        url: process.env.REDIS_URL
+        url: process.env.REDIS_CONNECTION
       })
     }
     catch (err) /* istanbul ignore next */ {

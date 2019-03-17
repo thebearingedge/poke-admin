@@ -5,6 +5,7 @@ import getConnections from '../database/get-connections'
 ;(async () => {
   /* eslint-disable no-console */
   try {
+    console.log(Object.keys(process.env))
     console.log('Acquiring database connections...')
     const { knex, redis } = await getConnections()
     console.log('Running latest migrations...')
