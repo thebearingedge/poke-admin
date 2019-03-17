@@ -19,7 +19,7 @@
       "generator": "secret"
     },
     "SESSION_EXPIRY": {
-      "value": 28800000
+      "value": "28800000"
     }
   },
   "formation": {

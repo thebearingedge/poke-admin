@@ -1,7 +1,6 @@
 .*
 **/test/
 **/*.test.*
+node_modules/
+client/.next/
 database/seeds/dev/
-client/*
-!client/.next/
-!client/create-client.js/
