@@ -13,7 +13,7 @@ let redis
 const connectToPostgres = () => {
   knex = Knex({
     client: 'pg',
-    connection: process.env.POSTGRES_URL,
+    connection: process.env.DATABASE_URL,
     postProcessResponse: camelKeys,
     wrapIdentifier: (value, wrap) => wrap(snakeCase(value))
   })
