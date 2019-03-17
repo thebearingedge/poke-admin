@@ -1,0 +1,7 @@
+.*
+**/test/
+**/*.test.*
+database/seeds/dev/
+client/*
+!client/.next/
+!client/create-client.js/
