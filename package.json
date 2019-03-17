@@ -27,8 +27,8 @@
     "test:e2e": "run-s -s build 'e2e run'"
   },
   "dependencies": {
+    "argon2": "0.21.0",
     "axios": "0.18.0",
-    "bcrypt": "3.0.4",
     "bluebird": "3.5.3",
     "boom": "7.3.0",
     "chalk": "2.4.2",

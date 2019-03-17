@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import argon2 from 'argon2'
 
 export default function usersGateway({ knex }) {
   return {
@@ -10,7 +10,7 @@ export default function usersGateway({ knex }) {
         .first()
       if (!user) return { userId: null }
       const { userId, password: hashed } = user
-      const passwordsMatch = await bcrypt.compare(unhashed, hashed)
+      const passwordsMatch = await argon2.verify(hashed, unhashed)
       if (!passwordsMatch) return { userId: null }
       return { userId }
     }

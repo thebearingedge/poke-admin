@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import argon2 from 'argon2'
 
 export const user = {
   userId: process.env.ADMIN_USER_ID,
@@ -7,8 +7,7 @@ export const user = {
 }
 
 export async function seed(knex) {
-  const saltRounds = process.env.NODE_ENV === 'production' ? 12 : 1
-  const password = await bcrypt.hash(user.password, saltRounds)
+  const password = await argon2.hash(user.password)
   await knex.raw('truncate table users cascade')
   await knex
     .insert({ ...user, password })
