@@ -8,9 +8,9 @@ export const { Provider } = servicesContext
 
 export const withServices = (Component, selectServices = identity) => {
   const WithServices = memo(props => {
-    const services = useContext(servicesContext)
+    const services = selectServices(useContext(servicesContext))
     return (
-      <Component {...selectServices(services)} {...props} />
+      <Component {...services} {...props} />
     )
   })
   WithServices.displayName = `WithServices(${getDisplayName(Component)})`
