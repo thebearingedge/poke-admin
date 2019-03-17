@@ -2,7 +2,7 @@ FROM node:10.15.3-alpine
 
 WORKDIR /app/
 
-RUN apk add --no-cache --virtual .build-tools \
+RUN apk update && apk add --no-cache --virtual .build-tools \
         python \
         make \
         g++

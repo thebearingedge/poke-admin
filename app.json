@@ -11,6 +11,15 @@
     },
     "REDIS_URL": {
       "required": true
+    },
+    "JWT_SECRET": {
+      "generator": "secret"
+    },
+    "SESSION_SECRET": {
+      "generator": "secret"
+    },
+    "SESSION_EXPIRY": {
+      "value": 28800000
     }
   },
   "formation": {
