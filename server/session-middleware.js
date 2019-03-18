@@ -8,6 +8,7 @@ export default function sessionMiddleware({ redis }) {
   return session({
     resave: true,
     name: 'token',
+    proxy: true,
     genid: req => req.token,
     saveUninitialized: false,
     secret: process.env.SESSION_SECRET,
