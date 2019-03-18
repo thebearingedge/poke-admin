@@ -1,0 +1,6 @@
+.*
+**/test/
+**/*.test.*
+node_modules/
+client/.next/
+database/seeds/dev/

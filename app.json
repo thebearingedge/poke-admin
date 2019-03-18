@@ -1,24 +1,28 @@
 {
+  "name": "poke-admin",
+  "stack": "container",
   "addons": [
     "heroku-postgresql",
-    "rediscloud",
     "heroku-redis"
   ],
-  "buildpacks": [
-
-  ],
   "env": {
-    "REDISCLOUD_URL": {
+    "ADMIN_USER_ID": {
+      "required": true
+    },
+    "ADMIN_USERNAME": {
+      "value": "admin"
+    },
+    "ADMIN_PASSWORD": {
+      "generator": "secret"
+    },
+    "JWT_SECRET": {
+      "generator": "secret"
+    },
+    "SESSION_SECRET": {
+      "generator": "secret"
+    },
+    "SESSION_EXPIRY": {
       "required": true
     }
-  },
-  "formation": {
-    "web": {
-      "quantity": 1
-    }
-  },
-  "name": "poke-admin",
-  "scripts": {
-  },
-  "stack": "container"
+  }
 }

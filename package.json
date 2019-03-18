@@ -1,22 +1,213 @@
 {
   "name": "poke-admin",
   "version": "1.0.0",
+  "engines": {
+    "node": "10.15.3"
+  },
   "description": "Demo CRUD app for Cypress presentation.",
-  "main": "index.js",
+  "main": "server/index.js",
   "scripts": {
     "db:start": "docker-compose up -d --build",
     "db:stop": "docker-compose down",
+    "db:check": "node -r dotenv/config -r esm database/check.js",
     "db:make": "pg-bump create",
     "db:up": "pg-bump up",
     "db:down": "pg-bump down",
-    "db:cycle": "run-s -s db:down db:up"
+    "db:cycle": "run-s -s db:down db:up db:seed",
+    "db:seed": "node -r dotenv/config -r esm database/seeds/__dev__.js",
+    "build:client": "next build client/",
+    "build": "docker build -t poke-admin .",
+    "start": "node -r dotenv/config -r esm .",
+    "dev": "run-s -s db:check db:cycle && nodemon .",
+    "lint": "eslint --fix .",
+    "test:api": "run-s -s db:check db:cycle && mocha --opts api/test/mocha.opts",
+    "tdd:api": "run-s -s 'test:api -- -w -R min'",
+    "cover:api": "nyc npm run test:api",
+    "test": "run-s -s test:*",
+    "e2e": "run-s -s db:check db:cycle && node -r dotenv/config -r esm test/",
+    "test:e2e": "run-s -s build:client 'e2e run'"
+  },
+  "dependencies": {
+    "argon2": "0.21.0",
+    "axios": "0.18.0",
+    "bluebird": "3.5.3",
+    "boom": "7.3.0",
+    "chalk": "2.4.2",
+    "connect-redis": "3.4.0",
+    "dotenv": "6.2.0",
+    "esm": "3.2.14",
+    "express": "4.16.4",
+    "express-promise-router": "3.0.3",
+    "express-session": "1.15.6",
+    "final-form": "4.12.0",
+    "jsonwebtoken": "8.5.0",
+    "knex": "0.16.3",
+    "lodash": "4.17.11",
+    "next": "8.0.3",
+    "nprogress": "0.2.0",
+    "pg": "7.8.2",
+    "pg-bump": "3.0.0-beta.4",
+    "promise-retry": "1.1.1",
+    "react": "16.8.4",
+    "react-display-name": "0.2.4",
+    "react-dom": "16.8.4",
+    "react-final-form": "4.1.0",
+    "reactstrap": "7.1.0",
+    "redis": "2.8.0",
+    "yup": "0.26.10"
+  },
+  "devDependencies": {
+    "@babel/core": "7.3.4",
+    "babel-eslint": "10.0.1",
+    "babel-plugin-root-import": "6.1.0",
+    "chai": "4.2.0",
+    "chai-struct": "3.0.4",
+    "cypress": "3.2.0",
+    "eslint": "5.15.1",
+    "eslint-config-standard": "12.0.0",
+    "eslint-plugin-cypress": "2.2.1",
+    "eslint-plugin-import": "2.16.0",
+    "eslint-plugin-node": "8.0.1",
+    "eslint-plugin-promise": "4.0.1",
+    "eslint-plugin-react": "7.12.4",
+    "eslint-plugin-standard": "4.0.0",
+    "husky": "1.3.1",
+    "lint-staged": "8.1.5",
+    "mocha": "6.0.2",
+    "nodemon": "1.18.10",
+    "npm-run-all": "4.1.5",
+    "nyc": "13.3.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix",
+      "git add"
+    ]
   },
   "pgBump": {
     "require": [
       "dotenv/config"
     ],
     "files": "database/migrations/",
-    "connectionVar": "POSTGRES_URL"
+    "connectionVar": "DATABASE_URL"
+  },
+  "nyc": {
+    "reporter": [
+      "html",
+      "text-summary"
+    ],
+    "include": [
+      "api/**/*.js"
+    ],
+    "exclude": [
+      "**/test/**",
+      "**/*.test.*",
+      "coverage/**"
+    ]
+  },
+  "nodemonConfig": {
+    "exec": "node -r dotenv/config -r esm",
+    "watch": [
+      "api/",
+      "server/",
+      "client/create-client.js"
+    ],
+    "ignore": [
+      "**/test/",
+      "**/*.test.js"
+    ]
+  },
+  "eslintConfig": {
+    "parser": "babel-eslint",
+    "extends": [
+      "plugin:react/recommended",
+      "eslint:recommended",
+      "standard"
+    ],
+    "plugins": [
+      "cypress"
+    ],
+    "settings": {
+      "react": {
+        "version": "^16.8"
+      }
+    },
+    "rules": {
+      "padded-blocks": 0,
+      "curly": [
+        "error",
+        "multi-line"
+      ],
+      "brace-style": [
+        "error",
+        "stroustrup"
+      ],
+      "no-console": [
+        "error",
+        {
+          "allow": [
+            "warn",
+            "error"
+          ]
+        }
+      ],
+      "space-before-function-paren": [
+        "error",
+        {
+          "anonymous": "always",
+          "named": "never",
+          "asyncArrow": "always"
+        }
+      ],
+      "react/prop-types": 0,
+      "react/react-in-jsx-scope": 0
+    },
+    "overrides": [
+      {
+        "files": [
+          "**/test/*.js",
+          "**/*.test.js"
+        ],
+        "env": {
+          "mocha": true
+        }
+      },
+      {
+        "files": [
+          "{api,database,server}/**/*.js",
+          "client/create-client.js"
+        ],
+        "env": {
+          "node": true
+        }
+      },
+      {
+        "files": [
+          "test/**/*.js"
+        ],
+        "env": {
+          "cypress/globals": true
+        }
+      }
+    ]
+  },
+  "babel": {
+    "overrides": [
+      {
+        "test": "client/",
+        "plugins": [
+          "babel-plugin-root-import"
+        ],
+        "presets": [
+          "next/babel"
+        ]
+      }
+    ]
   },
   "repository": {
     "type": "git",
@@ -28,12 +219,5 @@
   "bugs": {
     "url": "https://github.com/thebearingedge/poke-admin/issues"
   },
-  "homepage": "https://github.com/thebearingedge/poke-admin#readme",
-  "dependencies": {
-    "dotenv": "6.2.0",
-    "pg-bump": "3.0.0-beta.4"
-  },
-  "devDependencies": {
-    "npm-run-all": "4.1.5"
-  }
+  "homepage": "https://github.com/thebearingedge/poke-admin#readme"
 }
