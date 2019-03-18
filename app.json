@@ -6,11 +6,14 @@
     "heroku-redis"
   ],
   "env": {
-    "DATABASE_URL": {
+    "ADMIN_USER_ID": {
       "required": true
     },
-    "REDIS_URL": {
-      "required": true
+    "ADMIN_USERNAME": {
+      "value": "admin"
+    },
+    "ADMIN_PASSWORD": {
+      "generator": "secret"
     },
     "JWT_SECRET": {
       "generator": "secret"
@@ -19,12 +22,7 @@
       "generator": "secret"
     },
     "SESSION_EXPIRY": {
-      "value": "28800000"
-    }
-  },
-  "formation": {
-    "web": {
-      "quantity": 1
+      "required": true
     }
   }
 }
