@@ -6,7 +6,7 @@ import getConnections from '../get-connections'
   try {
     await redis.flushallAsync()
     await knex.seed.run({
-      directory: path.join(__dirname, 'dev/')
+      directory: path.join(__dirname, 'development/')
     })
     await knex.destroy()
     await redis.quitAsync()

@@ -12,7 +12,7 @@ export async function seed(knex) {
     }
     catch (err) {
       console.error(err)
-      console.error(chalk.red(`ERROR:Failed to run seed script for ${description}.`))
+      console.error(chalk.red(`ERROR: Failed to run seed script for ${description}.`))
       process.exit(1)
     }
   })(knex)
@@ -20,7 +20,6 @@ export async function seed(knex) {
   console.log('\n')
 
   await trySeed(admin, 'admin user')
-  await admin.seed(knex)
 
   console.log('\n')
 }
