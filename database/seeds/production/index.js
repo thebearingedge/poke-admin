@@ -14,7 +14,6 @@ export async function seed(knex) {
     .first()
   if (admin) return
   const password = await argon2.hash(user.password)
-  await knex.raw('truncate table users cascade')
   await knex
     .insert({ ...user, password })
     .into('users')
