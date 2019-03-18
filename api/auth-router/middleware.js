@@ -3,10 +3,10 @@ import jwt from 'jsonwebtoken'
 import { validate } from '../lib'
 import logInSchema from '../../schemas/log-in'
 
-const login = ({ users }) =>
+const login = ({ auth }) =>
   async (req, res) => {
     const { xhr, body: { username, password } } = req
-    const { userId } = await users.authenticate({ username, password })
+    const { userId } = await auth.login({ username, password })
     if (!userId) throw boom.unauthorized('Incorrect username or password.')
     const token = jwt.sign({ userId }, process.env.JWT_SECRET)
     if (!xhr) return res.status(201).json({ token })
@@ -22,7 +22,7 @@ const login = ({ users }) =>
     res.status(201).json({ userId })
   }
 
-export const handleLogin = ({ users }) => [
+export const handleLogin = ({ auth }) => [
   validate({ body: logInSchema }),
-  login({ users })
+  login({ auth })
 ]
