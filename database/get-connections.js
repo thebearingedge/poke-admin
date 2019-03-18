@@ -9,8 +9,9 @@ promisifyAll(RedisClient.prototype)
 
 let knex
 let redis
+let connected = false
 
-const connectToPostgres = () => {
+export const connectToPostgres = () => {
   knex = Knex({
     client: 'pg',
     connection: process.env.DATABASE_URL,
@@ -30,7 +31,7 @@ const connectToPostgres = () => {
   }, { retries: 5 })
 }
 
-const connectToRedis = () => {
+export const connectToRedis = () => {
   return retry(async retry => {
     try {
       await new Promise((resolve, reject) => {
@@ -56,11 +57,13 @@ const connectToRedis = () => {
 }
 
 export default async function getConnections() {
+  if (connected) return { knex, redis }
   try {
     const [ knex, redis ] = await Promise.all([
       connectToPostgres(),
       connectToRedis()
     ])
+    connected = true
     return { knex, redis }
   }
   catch (err) /* istanbul ignore next */ {

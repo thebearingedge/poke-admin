@@ -82,6 +82,8 @@ describe('User can log in.', () => {
 
     context('logging in successfully', () => {
 
+      beforeEach(() => cy.seed('admin'))
+
       it('redirects the user to the index page', () => {
         cy.get('[name="username"]')
           .type(Cypress.env('ADMIN_USERNAME'))

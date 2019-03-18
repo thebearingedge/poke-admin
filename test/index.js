@@ -2,7 +2,7 @@ import cypress from 'cypress'
 import dotenv from 'dotenv'
 import fs from 'fs'
 import path from 'path'
-import createServer from '../server/create-server'
+import testServer from './support/test-server'
 import getConnections from '../database/get-connections'
 
 const dev = !process.env.CI
@@ -11,7 +11,7 @@ const envFile = path.join(process.cwd(), '.env')
 
 ;(async () => {
   const { knex, redis } = await getConnections()
-  const server = await createServer({ dev, knex, redis })
+  const server = await testServer({ dev, knex, redis })
   server.listen(process.env.PORT, async () => {
     try {
       const results = await cypress[method]({
