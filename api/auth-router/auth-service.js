@@ -2,7 +2,7 @@ import argon2 from 'argon2'
 
 export default function usersGateway({ knex }) {
   return {
-    async authenticate({ username, password: unhashed }) {
+    async login({ username, password: unhashed }) {
       const user = await knex
         .select(['userId', 'password'])
         .from('users')

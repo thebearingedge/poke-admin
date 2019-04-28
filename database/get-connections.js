@@ -7,30 +7,28 @@ import camelKeys from './lib/camel-keys'
 
 promisifyAll(RedisClient.prototype)
 
-let knex
-let redis
-
 const connectToPostgres = () => {
-  knex = Knex({
-    client: 'pg',
-    connection: process.env.DATABASE_URL,
-    postProcessResponse: camelKeys,
-    wrapIdentifier: (value, wrap) => wrap(snakeCase(value))
-  })
+  let knex
   return retry(async retry => {
+    knex = Knex({
+      client: 'pg',
+      connection: process.env.DATABASE_URL,
+      postProcessResponse: camelKeys,
+      wrapIdentifier: (value, wrap) => wrap(snakeCase(value))
+    })
     try {
       await knex.raw('select 1')
       return knex
     }
     catch (err) /* istanbul ignore next */ {
       if (err.code !== 'ETIMEDOUT') return retry(err)
-      redis && redis.end(false)
       throw err
     }
   }, { retries: 5 })
 }
 
 const connectToRedis = () => {
+  let redis
   return retry(async retry => {
     try {
       await new Promise((resolve, reject) => {
@@ -49,7 +47,6 @@ const connectToRedis = () => {
     }
     catch (err) /* istanbul ignore next */ {
       if (err.code !== 'ETIMEDOUT') return retry(err)
-      knex && knex.destroy()
       throw err
     }
   }, { retries: 5 })

@@ -3,4 +3,5 @@
 **/*.test.*
 node_modules/
 client/.next/
+coverage/
 database/seeds/dev/

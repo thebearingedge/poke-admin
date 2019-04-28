@@ -10,3 +10,12 @@ Cypress.Commands.add('login', () => {
     }
   })
 })
+
+Cypress.Commands.add('seed', (type, options) => {
+  cy.request({
+    log: false,
+    qs: options,
+    method: 'POST',
+    url: `/cypress/seed/${type}`
+  })
+})
