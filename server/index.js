@@ -25,7 +25,7 @@ import getConnections from '../database/get-connections'
     const server = await createServer({ dev, knex, redis })
 
     server.listen(process.env.PORT, () => {
-      console.log('Listening on port', process.env.PORT, '.')
+      console.log(`Server listening on port ${process.env.PORT}`)
     })
   }
   catch (err) {

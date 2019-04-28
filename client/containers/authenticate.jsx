@@ -11,7 +11,7 @@ const Authenticate = ({ api, modal, router, session }) => {
     switch (status) {
       case 201:
         session.start(data)
-        router.push('/')
+        router.replace('/')
         return
       case 400:
         return data.errors.body
