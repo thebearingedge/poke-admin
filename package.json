@@ -23,9 +23,9 @@
     "test:api": "run-s -s db:check db:cycle && mocha --opts api/test/mocha.opts",
     "tdd:api": "run-s -s 'test:api -- -w -R min'",
     "cover:api": "nyc npm run test:api",
-    "test": "run-s -s test:*",
+    "test": "run-s -s test:* e2e:run",
     "e2e": "run-s -s db:check db:cycle && node -r dotenv/config -r esm test/",
-    "test:e2e": "run-s -s build:client 'e2e run'"
+    "e2e:run": "run-s -s build:client 'e2e run'"
   },
   "dependencies": {
     "argon2": "0.21.0",

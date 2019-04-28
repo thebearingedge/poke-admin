@@ -14,5 +14,5 @@ before_script:
   - docker-compose up -d
 script:
   - npm run cover:api
-  - xvfb-run -s "-screen 0 1024x768x24" npm run test:e2e
+  - xvfb-run -s "-screen 0 1024x768x24" npm run e2e:run
   - npm run build
