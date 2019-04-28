@@ -6,8 +6,8 @@ export default async function testServer({ dev, knex, redis }) {
   return express()
     .post('/cypress/seed/:type', async (req, res) => {
       try {
-        const { query, params: { type } } = req
-        await seeds[type](knex, query)
+        const { params: { type }, query: options } = req
+        await seeds[type](knex, options)
         res.end()
       }
       catch (err) {

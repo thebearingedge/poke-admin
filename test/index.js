@@ -5,9 +5,9 @@ import path from 'path'
 import testServer from './support/test-server'
 import getConnections from '../database/get-connections'
 
-const dev = !process.env.CI
 const [ , , method = 'open' ] = process.argv
 const envFile = path.join(process.cwd(), '.env')
+const dev = !process.env.CI && method !== 'run'
 
 ;(async () => {
   const { knex, redis } = await getConnections()

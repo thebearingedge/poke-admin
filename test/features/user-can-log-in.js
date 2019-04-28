@@ -4,19 +4,15 @@ describe('User can log in.', () => {
 
     it('redirects the user to login', () => {
       cy.visit('/')
-        .location()
-        .should(({ pathname }) => {
-          expect(pathname).to.equal('/login')
-        })
+      cy.location('pathname')
+        .should('equal', '/login')
     })
 
   })
 
   context('attempting to log in', () => {
 
-    beforeEach(() => {
-      cy.visit('/login')
-    })
+    beforeEach(() => cy.visit('/login'))
 
     context('omitting required fields', () => {
 
@@ -24,10 +20,10 @@ describe('User can log in.', () => {
         cy.get('button')
           .contains('Submit')
           .click()
-          .get('.invalid-tooltip')
+        cy.get('.invalid-tooltip')
           .contains('Username is a required field')
           .should('be.visible')
-          .get('.invalid-tooltip')
+        cy.get('.invalid-tooltip')
           .contains('Password is a required field')
           .should('be.visible')
       })
@@ -40,14 +36,14 @@ describe('User can log in.', () => {
         cy.get('button')
           .contains('Submit')
           .click()
-          .get('[name="username"]')
+        cy.get('[name="username"]')
           .type(`${Cypress.env('ADMIN_USERNAME')}`)
-          .get('.invalid-tooltip')
+        cy.get('.invalid-tooltip')
           .contains('Username is a required field')
           .should('not.exist')
-          .get('[name="password"]')
+        cy.get('[name="password"]')
           .type(`${Cypress.env('ADMIN_PASSWORD')}`)
-          .get('.invalid-tooltip')
+        cy.get('.invalid-tooltip')
           .should('not.exist')
       })
 
@@ -60,21 +56,21 @@ describe('User can log in.', () => {
         cy.route('POST', '/api/auth/login')
           .as('login')
         cy.get('[name="username"]')
-          .type(Cypress.env('ADMIN_USERNAME') + ' fail')
-          .get('[name="password"')
+          .type(`${Cypress.env('ADMIN_USERNAME')} fail`)
+        cy.get('[name="password"]')
           .type(`${Cypress.env('ADMIN_PASSWORD')} fail{enter}`)
-          .wait('@login')
+        cy.wait('@login')
           .its('status')
           .should('equal', 401)
-          .location('pathname')
+        cy.location('pathname')
           .should('equal', '/login')
-          .get('[role="dialog"]')
+        cy.get('[role="dialog"]')
           .contains('Incorrect username or password.')
           .should('exist')
-          .get('button')
+        cy.get('button')
           .contains('Dismiss')
           .click()
-          .get('[role="dialog"]')
+        cy.get('[role="dialog"]')
           .should('not.exist')
       })
 
@@ -85,11 +81,17 @@ describe('User can log in.', () => {
       beforeEach(() => cy.seed('admin'))
 
       it('redirects the user to the index page', () => {
+        cy.server()
+        cy.route('POST', '/api/auth/login')
+          .as('login')
         cy.get('[name="username"]')
           .type(Cypress.env('ADMIN_USERNAME'))
-          .get('[name="password"')
+        cy.get('[name="password"]')
           .type(`${Cypress.env('ADMIN_PASSWORD')}{enter}`)
-          .location('pathname')
+        cy.wait('@login')
+          .its('status')
+          .should('equal', 201)
+        cy.location('pathname')
           .should('equal', '/')
       })
 
@@ -101,9 +103,9 @@ describe('User can log in.', () => {
 
     beforeEach(() => cy.login())
 
-    it('redirects the user to the app', () => {
+    it('redirects the user to the index page', () => {
       cy.visit('/login')
-        .location('pathname')
+      cy.location('pathname')
         .should('equal', '/')
     })
 
